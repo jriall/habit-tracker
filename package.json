@@ -1,0 +1,15 @@
+{
+  "name": "habit-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "James Riall <jriall@gocardless.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^8.0.1"
+  },
+  "scripts": {
+    "postinstall": "husky install"
+  }
+}
