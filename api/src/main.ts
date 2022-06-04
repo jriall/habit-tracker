@@ -1,19 +1,29 @@
+import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 
 import { AppModule } from "./app.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app: NestExpressApplication = await NestFactory.create(AppModule);
+  const config: ConfigService = app.get(ConfigService);
+  const port: number = config.get<number>("PORT");
 
-  const config = new DocumentBuilder()
-    .setTitle('Habit Tracker')
-    .setDescription('The Habit Tracker app API')
-    .setVersion('1.0')
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle("Habit Tracker")
+    .setDescription("The Habit Tracker app API")
+    .setVersion("1.0")
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup("api", app, document);
 
-  await app.listen(3000);
+  await app.listen(port, () => {
+    console.log("[WEB]", config.get<string>("BASE_URL"));
+  });
 }
+
 bootstrap();
