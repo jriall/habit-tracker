@@ -1,3 +1,4 @@
+import { HabitInterval } from "src/common/constants/habits";
 import {
   Column,
   CreateDateColumn,
@@ -13,6 +14,18 @@ export class Habit {
 
   @Column({ type: "varchar", length: 120 })
   public name: string;
+
+  @Column({ type: "varchar", nullable: true })
+  public description: string;
+
+  @Column({ type: "enum", enum: HabitInterval })
+  public habitInterval: HabitInterval;
+
+  @Column({ type: "int" })
+  public habitFrequency: number;
+
+  @Column({ type: "boolean", default: "false" })
+  public isArchived: boolean;
 
   // Create and Update Date Columns
   @CreateDateColumn({ type: "timestamp" })
