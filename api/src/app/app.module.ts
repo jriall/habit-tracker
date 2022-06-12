@@ -3,7 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { getEnvPath } from "../common/helper/env.helper";
-import { TypeOrmConfigService } from "../shared/typeorm/typeorm.service";
+import { TypeOrmConfigService } from "../common/typeorm/typeorm.service";
 import { UsersModule } from "../users/users.module";
 import { HabitsModule } from "../habits/habits.module";
 
