@@ -20,7 +20,9 @@ export class HabitsController {
 
   @Post()
   create(@Body() createHabitDto: CreateHabitDto) {
-    return this.habitsService.create(createHabitDto);
+    // TODO(jriall): Use real user ID from auth.
+    const userId = 2;
+    return this.habitsService.create(createHabitDto, userId);
   }
 
   @Get()

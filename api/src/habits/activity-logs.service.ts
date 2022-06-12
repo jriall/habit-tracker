@@ -33,6 +33,7 @@ export class ActivityLogsService {
       order: {
         id: "DESC",
       },
+      loadRelationIds: { relations: ["habit"] },
     });
   }
 
@@ -41,6 +42,7 @@ export class ActivityLogsService {
       where: {
         id,
       },
+      loadRelationIds: { relations: ["habit"] },
     });
   }
 

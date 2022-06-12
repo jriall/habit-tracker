@@ -1,8 +1,11 @@
 import { HabitInterval } from "src/common/constants/habits";
+import { User } from "src/users/entities/user.entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -32,6 +35,10 @@ export class Habit {
 
   @OneToMany(() => ActivityLog, (activityLog) => activityLog.habit)
   activityLogs: ActivityLog[];
+
+  @ManyToOne(() => User, (user) => user.habits)
+  @JoinColumn({ name: "userId" })
+  user: User;
 
   // Create and Update Date Columns
   @CreateDateColumn({ type: "timestamp" })

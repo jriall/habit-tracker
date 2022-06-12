@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "src/users/entities/user.entity";
 import { DeleteResult, Repository } from "typeorm";
 
 import { CreateHabitDto } from "./dto/create-habit.dto";
@@ -9,10 +10,19 @@ import { Habit } from "./entities/habit.entity";
 @Injectable()
 export class HabitsService {
   @InjectRepository(Habit)
-  private readonly repository: Repository<Habit>;
+  private readonly habitRepository: Repository<Habit>;
 
-  create(body: CreateHabitDto): Promise<Habit> {
+  @InjectRepository(User)
+  private readonly userRepository: Repository<User>;
+
+  async create(body: CreateHabitDto, userId: number): Promise<Habit> {
     const habit: Habit = new Habit();
+
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
 
     const { name, habitFrequency, description, habitInterval } = body;
 
@@ -20,24 +30,27 @@ export class HabitsService {
     habit.description = description;
     habit.habitFrequency = habitFrequency;
     habit.habitInterval = habitInterval;
+    habit.user = user;
 
-    return this.repository.save(habit);
+    return this.habitRepository.save(habit);
   }
 
-  findAll(): Promise<Habit[]> {
-    return this.repository.find({
+  async findAll(): Promise<Habit[]> {
+    return this.habitRepository.find({
       order: {
         name: "ASC",
         id: "DESC",
       },
+      loadRelationIds: { relations: ["user"] },
     });
   }
 
   findOne(id: number): Promise<Habit> {
-    return this.repository.findOne({
+    return this.habitRepository.findOne({
       where: {
         id,
       },
+      loadRelationIds: { relations: ["user"] },
     });
   }
 
@@ -46,6 +59,6 @@ export class HabitsService {
   }
 
   remove(id: number): Promise<DeleteResult> {
-    return this.repository.delete(id);
+    return this.habitRepository.delete(id);
   }
 }
