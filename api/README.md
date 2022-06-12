@@ -30,11 +30,15 @@
 
 ```bash
 $ npm install
+
+TODO(jriall): Add instructions to setup the database.
 ```
 
 ## Running the app
 
 ```bash
+psql -h localhost
+
 # development
 $ npm run start
 
