@@ -1,6 +1,7 @@
 import {
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -14,6 +15,7 @@ export class ActivityLog {
   public id!: number;
 
   @ManyToOne(() => Habit, (habit) => habit.activityLogs)
+  @JoinColumn({ name: "habitId" })
   habit: Habit;
 
   // Create and Update Date Columns
