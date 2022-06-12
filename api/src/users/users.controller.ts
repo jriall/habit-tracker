@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Inject,
+  HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -28,8 +30,14 @@ export class UsersController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param("id") id: string) {
+    const user = await this.usersService.findOne(+id);
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
   }
 
   @Patch(":id")
@@ -38,7 +46,13 @@ export class UsersController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param("id") id: string) {
+    const deleteResult = await this.usersService.remove(+id);
+
+    if (deleteResult.affected === 0) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return deleteResult
   }
 }

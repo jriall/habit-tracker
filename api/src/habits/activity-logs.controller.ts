@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 
 import { ActivityLogsService } from "./activity-logs.service";
@@ -26,8 +28,14 @@ export class ActivityLogsController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.activityLogsService.findOne(+id);
+  async findOne(@Param("id") id: string) {
+    const activityLog = await this.activityLogsService.findOne(+id);
+
+    if (!activityLog) {
+      throw new HttpException('ActivityLog not found', HttpStatus.NOT_FOUND);
+    }
+
+    return activityLog;
   }
 
   @Patch(":id")
@@ -39,7 +47,13 @@ export class ActivityLogsController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.activityLogsService.remove(+id);
+  async remove(@Param("id") id: string) {
+    const deleteResult = await this.activityLogsService.remove(+id);
+
+    if (deleteResult.affected === 0) {
+      throw new HttpException('ActivityLog not found', HttpStatus.NOT_FOUND);
+    }
+
+    return deleteResult;
   }
 }

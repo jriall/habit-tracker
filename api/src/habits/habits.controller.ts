@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 
 import { HabitsService } from "./habits.service";
@@ -27,8 +29,14 @@ export class HabitsController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.habitsService.findOne(+id);
+  async findOne(@Param("id") id: string) {
+    const habit = await this.habitsService.findOne(+id);
+
+    if (!habit) {
+      throw new HttpException('Habit not found', HttpStatus.NOT_FOUND);
+    }
+
+    return habit;
   }
 
   @Patch(":id")
@@ -37,7 +45,14 @@ export class HabitsController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.habitsService.remove(+id);
+  async remove(@Param("id") id: string) {
+    const deleteResult = await this.habitsService.remove(+id);
+
+    if (deleteResult.affected === 0) {
+      throw new HttpException('Habit not found', HttpStatus.NOT_FOUND);
+    }
+
+    return deleteResult;
+
   }
 }
