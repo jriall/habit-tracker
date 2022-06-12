@@ -10,7 +10,7 @@ import { HabitsModule } from "../habits/habits.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
-const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
+const envFilePath: string = getEnvPath(`${__dirname}/../common/envs`);
 
 @Module({
   imports: [
