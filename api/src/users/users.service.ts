@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
@@ -10,7 +10,7 @@ export class UsersService {
   @InjectRepository(User)
   private readonly repository: Repository<User>;
 
-  create(body: CreateUserDto) {
+  create(body: CreateUserDto): Promise<User> {
     const user: User = new User();
 
     user.name = body.name;
@@ -18,11 +18,16 @@ export class UsersService {
     return this.repository.save(user);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(): Promise<User[]> {
+    return this.repository.find({
+      order: {
+        name: "ASC",
+        id: "DESC",
+      },
+    });
   }
 
-  findOne(id: number) {
+  findOne(id: number): Promise<User> {
     return this.repository.findOne({
       where: {
         id,
@@ -34,7 +39,7 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: number): Promise<DeleteResult> {
+    return this.repository.delete(id);
   }
 }

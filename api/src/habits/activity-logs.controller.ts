@@ -9,16 +9,15 @@ import {
 } from "@nestjs/common";
 
 import { ActivityLogsService } from "./activity-logs.service";
-import { CreateActivityLogDto } from "./dto/create-activity-log.dto";
 import { UpdateActivityLogDto } from "./dto/update-activity-log.dto";
 
-@Controller("habits/:habit_id/activity-logs")
+@Controller("habits/:habitId/activity-logs")
 export class ActivityLogsController {
   constructor(private readonly activityLogsService: ActivityLogsService) {}
 
   @Post()
-  create(@Body() createActivityLogDto: CreateActivityLogDto) {
-    return this.activityLogsService.create(createActivityLogDto);
+  create(@Param("habitId") habitId: string) {
+    return this.activityLogsService.create(+habitId);
   }
 
   @Get()
