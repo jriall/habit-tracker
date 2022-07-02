@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle("Habit Tracker")
     .setDescription("The Habit Tracker app API")
     .setVersion("1.0")
+    .setExternalDoc("Postman Collection", "/api-json")
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("api", app, document);
