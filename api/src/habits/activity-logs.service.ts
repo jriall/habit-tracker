@@ -25,7 +25,7 @@ export class ActivityLogsService {
 
     activityLog.habit = habit;
 
-    return this.activityLogRespository.save(habit);
+    return this.activityLogRespository.save(activityLog);
   }
 
   findAll(): Promise<ActivityLog[]> {
