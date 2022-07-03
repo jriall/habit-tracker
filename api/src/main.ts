@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { writeFileSync } from "fs";
 
 import { AppModule } from "./app/app.module";
 
@@ -20,6 +21,9 @@ async function bootstrap() {
     .setExternalDoc("Postman Collection", "/api-json")
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
+  if (process.env.NODE_ENV === "development") {
+    writeFileSync("./swagger-spec.json", JSON.stringify(document, null, 2));
+  }
   SwaggerModule.setup("api", app, document);
 
   await app.listen(port, () => {
