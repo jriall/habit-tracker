@@ -8,7 +8,9 @@ import { writeFileSync } from "fs";
 import { AppModule } from "./app/app.module";
 
 async function bootstrap() {
-  const app: NestExpressApplication = await NestFactory.create(AppModule);
+  const app: NestExpressApplication = await NestFactory.create(AppModule, {
+    cors: process.env.NODE_ENV === "development",
+  });
   const config: ConfigService = app.get(ConfigService);
   const port: number = config.get<number>("PORT");
 
