@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -14,9 +15,12 @@ export class ActivityLog {
   @PrimaryGeneratedColumn()
   public id!: number;
 
+  @Column({ type: "timestamptz" })
+  public date: Date;
+
   @ManyToOne(() => Habit, (habit) => habit.activityLogs)
   @JoinColumn({ name: "habitId" })
-  habit: Habit;
+  public habit: Habit;
 
   // Create and Update Date Columns
   @CreateDateColumn({ type: "timestamp" })
